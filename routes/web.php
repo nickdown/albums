@@ -30,6 +30,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/albums', [AlbumController::class, 'index'])
         ->middleware(['auth', 'verified'])->name('albums');
+    Route::get('/albums/{album}', [AlbumController::class, 'show'])
+        ->middleware(['auth', 'verified'])->name('albums.show');
+    Route::post('/albums/{album}/resync', [AlbumController::class, 'resync'])
+        ->middleware(['auth', 'verified'])->name('albums.resync');
 });
 
 require __DIR__.'/auth.php';
