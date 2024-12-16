@@ -58,7 +58,6 @@ class AlbumSeeder extends Seeder
             ['name' => 'BEYONCÉ', 'artist_name' => 'Beyonce', 'spotify_id' => '2UJwKSBUz6rtW4QLK74kQu', 'spotify_uri' => 'spotify:album:2UJwKSBUz6rtW4QLK74kQu', 'spotify_image_url' => 'https://i.scdn.co/image/ab67616d0000b273c8a11e48c91a982d086afc69', 'release_date' => '2013-12-13'],
             ['name' => '4', 'artist_name' => 'Beyonce', 'spotify_id' => '1gIC63gC3B7o7FfpPACZQJ', 'spotify_uri' => 'spotify:album:1gIC63gC3B7o7FfpPACZQJ', 'spotify_image_url' => 'https://i.scdn.co/image/ab67616d0000b273ff5429125128b43572dbdccd', 'release_date' => '2011-06-24'],
             ['name' => 'I Am... Sasha Fierce', 'artist_name' => 'Beyonce', 'spotify_id' => '23Y5wdyP5byMFktZf8AcWU', 'spotify_uri' => 'spotify:album:23Y5wdyP5byMFktZf8AcWU', 'spotify_image_url' => 'https://i.scdn.co/image/ab67616d0000b273e13de7b8662b085b0885ffef', 'release_date' => '2008-11-18'],
-            ['name' => 'BDay', 'artist_name' => 'Beyonce', 'spotify_id' => '6oxVabMIqCMJRYN1GqR3Vf', 'spotify_uri' => 'spotify:album:6oxVabMIqCMJRYN1GqR3Vf', 'spotify_image_url' => 'https://i.scdn.co/image/ab67616d0000b273e0b64c8be3c4e804abcb2696', 'release_date' => '2006-09-01'],
             ['name' => 'Dangerously In Love', 'artist_name' => 'Beyonce', 'spotify_id' => '6oxVabMIqCMJRYN1GqR3Vf', 'spotify_uri' => 'spotify:album:6oxVabMIqCMJRYN1GqR3Vf', 'spotify_image_url' => 'https://i.scdn.co/image/ab67616d0000b273e0b64c8be3c4e804abcb2696', 'release_date' => '2003-06-24'],
             ['name' => 'folklore', 'artist_name' => 'Taylor Swift', 'spotify_id' => '2fenSS68JI1h4Fo296JfGr', 'spotify_uri' => 'spotify:album:2fenSS68JI1h4Fo296JfGr', 'spotify_image_url' => 'https://i.scdn.co/image/ab67616d0000b273c288028c2592f400dd0b9233', 'release_date' => '2020-07-24'],
             ['name' => 'evermore', 'artist_name' => 'Taylor Swift', 'spotify_id' => '6AORtDjduMM3bupSWzbTSG', 'spotify_uri' => 'spotify:album:6AORtDjduMM3bupSWzbTSG', 'spotify_image_url' => 'https://i.scdn.co/image/ab67616d0000b2739cf3f8f0a450020010ee3c22', 'release_date' => '2020-12-11'],
@@ -72,7 +71,6 @@ class AlbumSeeder extends Seeder
             ['name' => 'Dawn FM', 'artist_name' => 'The Weeknd', 'spotify_id' => '2nLOHgzXzwFEpl62zAgCEC', 'spotify_uri' => 'spotify:album:2nLOHgzXzwFEpl62zAgCEC', 'spotify_image_url' => 'https://i.scdn.co/image/ab67616d0000b273905e9670d145b2f9c7cf0c51', 'release_date' => '2022-01-07'],
             ['name' => 'After Hours', 'artist_name' => 'The Weeknd', 'spotify_id' => '4yP0hdKOZPNshxUOjY0cZj', 'spotify_uri' => 'spotify:album:4yP0hdKOZPNshxUOjY0cZj', 'spotify_image_url' => 'https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36', 'release_date' => '2020-03-20'],
             ['name' => 'Kiss Land', 'artist_name' => 'The Weeknd', 'spotify_id' => '3hhDpPtCFuQbppwYgsVhMO', 'spotify_uri' => 'spotify:album:3hhDpPtCFuQbppwYgsVhMO', 'spotify_image_url' => 'https://i.scdn.co/image/ab67616d0000b273b8c5e801d1eabf42b6f492af', 'release_date' => '2013-09-10'],
-            ['name' => 'House of Balloons', 'artist_name' => 'The Weeknd', 'spotify_id' => '5EbpxRwbbpCJUepbqVTZ1U', 'spotify_uri' => 'spotify:album:5EbpxRwbbpCJUepbqVTZ1U', 'spotify_image_url' => 'https://i.scdn.co/image/ab67616d0000b273b298538481c52f7e217ed000', 'release_date' => '2011-03-21'],
             ['name' => 'Nine Track Mind', 'artist_name' => 'Charlie Puth', 'spotify_id' => '1Dq6nZnvZrV2TcXOPjILHs', 'spotify_uri' => 'spotify:album:1Dq6nZnvZrV2TcXOPjILHs', 'spotify_image_url' => 'https://i.scdn.co/image/ab67616d0000b273633a2d775747bccfbcb17a45', 'release_date' => '2016-01-29'],
             ['name' => 'Donda', 'artist_name' => 'Kanye West', 'spotify_id' => '5CnpZV3q5BcESefcB3WJmz', 'spotify_uri' => 'spotify:album:5CnpZV3q5BcESefcB3WJmz', 'spotify_image_url' => 'https://i.scdn.co/image/ab67616d0000b273cad190f1a73c024e5a40dddd', 'release_date' => '2021-08-29'],
             ['name' => 'Jesus Is King', 'artist_name' => 'Kanye West', 'spotify_id' => '0FgZKfoU2Br5sHOfvZKTI9', 'spotify_uri' => 'spotify:album:0FgZKfoU2Br5sHOfvZKTI9', 'spotify_image_url' => 'https://i.scdn.co/image/ab67616d0000b2731bb797bbfe2480650b6c2964', 'release_date' => '2019-10-25'],
@@ -82,7 +80,7 @@ class AlbumSeeder extends Seeder
 
         foreach ($albumsData as $albumData) {
             $artist = Artist::where('name', $albumData['artist_name'])->first();
-            
+
             if ($artist) {
                 Album::create([
                     'name' => $albumData['name'],

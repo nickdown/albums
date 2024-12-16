@@ -40,10 +40,16 @@ const showingNavigationDropdown = ref(false);
                                     Dashboard
                                 </NavLink>
                                 <NavLink
-                                    :href="route('artists.index')"
-                                    :active="route().current('artists.index')"
+                                    :href="route('artists')"
+                                    :active="route().current('artists')"
                                 >
                                     Artists
+                                </NavLink>
+                                <NavLink
+                                    :href="route('albums')"
+                                    :active="route().current('albums')"
+                                >
+                                    Albums
                                 </NavLink>
                             </div>
                         </div>
@@ -153,10 +159,16 @@ const showingNavigationDropdown = ref(false);
                             Dashboard
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
-                            :href="route('artists.index')"
-                            :active="route().current('artists.index')"
+                            :href="route('artists')"
+                            :active="route().current('artists')"
                         >
                             Artists
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('albums')"
+                            :active="route().current('albums')"
+                        >
+                            Albums
                         </ResponsiveNavLink>
                     </div>
 
