@@ -43,13 +43,13 @@ class ArtistImportController extends Controller
             'spotify_image_url' => 'required|string'
         ]);
 
-        Artist::create($request->only([
+        $artist = Artist::create($request->only([
             'name',
             'spotify_id',
             'spotify_uri',
             'spotify_image_url'
         ]));
 
-        return redirect()->route('artists')->with('success', 'Artist imported successfully');
+        return redirect()->route('artists.show', $artist)->with('success', 'Artist imported successfully');
     }
 }
