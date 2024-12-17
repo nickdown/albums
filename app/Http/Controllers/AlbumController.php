@@ -11,9 +11,25 @@ class AlbumController extends Controller
 {
     public function index()
     {
-        $albums = auth()->user()->albums()->with('artist')->orderBy('name')->get();
+        $myAlbums = auth()->user()->albums()
+            ->with('artist')
+            ->orderBy('name')
+            ->get();
+
+        $otherAlbums = Album::whereDoesntHave('users', function($query) {
+                $query->where('users.id', auth()->id());
+            })
+            ->whereHas('users')
+            ->with(['artist', 'users' => function($query) {
+                $query->select('users.id', 'users.name');
+            }])
+            ->inRandomOrder()
+            ->limit(20)
+            ->get();
+
         return Inertia::render('Albums/Index', [
-            'albums' => $albums
+            'myAlbums' => $myAlbums,
+            'otherAlbums' => $otherAlbums
         ]);
     }
 
