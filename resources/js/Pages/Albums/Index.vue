@@ -29,7 +29,12 @@
                                 >
                                     {{ album.name }}
                                 </Link>
-                                <p class="text-sm text-gray-600 text-center">{{ album.artist.name }}</p>
+                                <Link 
+                                    :href="route('artists.show', album.artist.id)"
+                                    class="text-sm text-gray-500 text-center hover:text-gray-900"
+                                >
+                                    {{ album.artist.name }}
+                                </Link>
                                 <p class="text-xs text-gray-500 text-center">{{ new Date(album.release_date).getFullYear() }}</p>
                             </div>
                         </div>
@@ -60,8 +65,15 @@
                                         </div>
                                     </button>
                                 </div>
-                                <h3 class="mt-2 text-center font-medium">{{ album.name }}</h3>
-                                <p class="text-sm text-gray-600 text-center">{{ album.artist.name }}</p>
+                                <h3 class="mt-2 text-center font-medium group-hover:text-gray-600 transition-colors duration-200">
+                                    {{ album.name }}
+                                </h3>
+                                <Link 
+                                    :href="route('artists.show', album.artist.id)"
+                                    class="text-sm text-gray-500 text-center hover:text-gray-900"
+                                >
+                                    {{ album.artist.name }}
+                                </Link>
                                 <p class="text-xs text-gray-500 text-center">
                                     Added by {{ album.users[0].name }}
                                 </p>
