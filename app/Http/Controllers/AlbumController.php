@@ -12,7 +12,7 @@ class AlbumController extends Controller
 {
     public function index()
     {
-        $albums = Album::with('artist')->orderBy('name')->get();
+        $albums = auth()->user()->albums()->with('artist')->orderBy('name')->get();
         return Inertia::render('Albums/Index', [
             'albums' => $albums
         ]);
@@ -20,6 +20,11 @@ class AlbumController extends Controller
 
     public function show(Album $album)
     {
+        // Check if user has access to this album
+        if (!auth()->user()->albums()->where('albums.id', $album->id)->exists()) {
+            abort(403);
+        }
+
         $album->load('artist');
         return Inertia::render('Albums/Show', [
             'album' => $album
@@ -28,13 +33,12 @@ class AlbumController extends Controller
 
     public function resync(Album $album)
     {
-        try {
-            // Note: In a production app, you would want to:
-            // 1. Use a proper Spotify API client
-            // 2. Handle authentication properly
-            // 3. Store API credentials in .env
-            // 4. Use a job queue for this operation
+        // Check if user has access to this album
+        if (!auth()->user()->albums()->where('albums.id', $album->id)->exists()) {
+            abort(403);
+        }
 
+        try {
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . config('services.spotify.token')
             ])->get("https://api.spotify.com/v1/albums/{$album->spotify_id}");
@@ -79,7 +83,9 @@ class AlbumController extends Controller
                         'spotify_image_url' => $album['images'][0]['url'] ?? null,
                         'release_date' => $album['release_date'],
                         'already_imported' => Album::where('spotify_id', $album['id'])
-                            ->where('artist_id', $artistId)
+                            ->whereHas('users', function($query) {
+                                $query->where('users.id', auth()->id());
+                            })
                             ->exists()
                     ];
                 })
@@ -95,16 +101,31 @@ class AlbumController extends Controller
             'albums' => 'required|array',
             'albums.*.name' => 'required|string',
             'albums.*.artist_id' => 'required|exists:artists,id',
-            'albums.*.spotify_id' => 'required|string|unique:albums,spotify_id',
+            'albums.*.spotify_id' => 'required|string',
             'albums.*.spotify_uri' => 'required|string',
             'albums.*.spotify_image_url' => 'required|string',
             'albums.*.release_date' => 'required|date'
         ]);
 
         foreach ($request->albums as $albumData) {
-            Album::create($albumData);
+            // Find or create the album
+            $album = Album::firstOrCreate(
+                ['spotify_id' => $albumData['spotify_id']],
+                [
+                    'name' => $albumData['name'],
+                    'artist_id' => $albumData['artist_id'],
+                    'spotify_uri' => $albumData['spotify_uri'],
+                    'spotify_image_url' => $albumData['spotify_image_url'],
+                    'release_date' => $albumData['release_date']
+                ]
+            );
+
+            // Attach the album to the user if not already attached
+            if (!auth()->user()->albums()->where('albums.id', $album->id)->exists()) {
+                auth()->user()->albums()->attach($album->id);
+            }
         }
 
-        return redirect()->back()->with('success', count($request->albums) . ' albums imported successfully');
+        return redirect()->back()->with('success', count($request->albums) . ' albums added to your collection');
     }
 }
