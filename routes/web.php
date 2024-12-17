@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\ArtistImportController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,6 +30,10 @@ Route::middleware('auth')->group(function () {
         ->middleware(['auth', 'verified'])->name('artists');
     Route::get('/artists/{artist}', [ArtistController::class, 'show'])
         ->middleware(['auth', 'verified'])->name('artists.show');
+    Route::post('/artists/search', [ArtistImportController::class, 'search'])
+        ->middleware(['auth', 'verified'])->name('artists.search');
+    Route::post('/artists/import', [ArtistImportController::class, 'store'])
+        ->middleware(['auth', 'verified'])->name('artists.import');
 
     Route::get('/albums', [AlbumController::class, 'index'])
         ->middleware(['auth', 'verified'])->name('albums');
