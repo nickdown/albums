@@ -16,7 +16,7 @@ class WelcomeController extends Controller
             ->select('id', 'name', 'spotify_image_url', 'artist_name', 'release_date')
             ->whereHas('users')
             ->orderBy('created_at', 'desc')
-            ->take(10)
+            ->take(40)
             ->get()
             ->map(function ($album) {
                 return [
@@ -35,4 +35,4 @@ class WelcomeController extends Controller
             'canRegister' => Route::has('register'),
         ]);
     }
-} 
+}
