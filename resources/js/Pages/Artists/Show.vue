@@ -47,11 +47,11 @@
                     <div class="p-6">
                         <!-- Artist Header -->
                         <div class="flex flex-col items-center mb-8">
-                            <div class="relative group mb-6">
+                            <div class="relative mb-6">
                                 <img 
                                     :src="artist.spotify_image_url" 
                                     :alt="artist.name"
-                                    class="w-48 h-48 rounded-full shadow-lg transition-transform duration-200 group-hover:scale-105"
+                                    class="w-48 h-48 rounded-full shadow-lg"
                                 >
                             </div>
                             <h1 class="text-4xl font-bold mb-4">{{ artist.name }}</h1>
