@@ -56,11 +56,18 @@ class ArtistController extends Controller
     public function destroy(Artist $artist)
     {
         try {
+            // Get the user's albums that are by this artist
+            $albumsToRemove = $artist->albums()
+                ->whereHas('users', function($query) {
+                    $query->where('users.id', auth()->id());
+                })
+                ->pluck('id');
+
             // Remove the artist from the user's collection
             auth()->user()->artists()->detach($artist->id);
             
-            // Also remove all of the artist's albums from the user's collection
-            auth()->user()->albums()->whereIn('albums.id', $artist->albums->pluck('id'))->detach();
+            // Remove only this artist's albums from the user's collection
+            auth()->user()->albums()->detach($albumsToRemove);
             
             return redirect()->route('artists')->with('success', 'Artist has been removed from your collection.');
         } catch (\Exception $e) {
