@@ -43,13 +43,27 @@ class ArtistController extends Controller
             abort(403);
         }
 
-        $artist->load(['albums' => function ($query) {
-            $query->whereIn('id', auth()->user()->albums()->pluck('albums.id'))
-                ->orderBy('release_date', 'desc');
-        }]);
+        // Get the user's albums for this artist
+        $myAlbums = $artist->albums()
+            ->whereIn('id', auth()->user()->albums()->pluck('albums.id'))
+            ->orderBy('release_date', 'desc')
+            ->get();
+
+        // Get other users' albums for this artist
+        $otherAlbums = $artist->albums()
+            ->whereNotIn('id', auth()->user()->albums()->pluck('albums.id'))
+            ->whereHas('users')
+            ->with(['users' => function($query) {
+                $query->select('users.id', 'users.name');
+            }])
+            ->orderBy('release_date', 'desc')
+            ->get();
         
         return Inertia::render('Artists/Show', [
-            'artist' => $artist
+            'artist' => array_merge($artist->toArray(), [
+                'my_albums' => $myAlbums,
+                'other_albums' => $otherAlbums
+            ])
         ]);
     }
 
