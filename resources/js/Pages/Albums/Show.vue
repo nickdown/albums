@@ -22,7 +22,10 @@
                             <!-- Album Details -->
                             <div class="w-full md:w-2/3">
                                 <h1 class="text-3xl font-bold mb-2">{{ album.name }}</h1>
-                                <Link :href="route('artists')" class="text-xl text-gray-600 hover:text-gray-900 mb-4 block">
+                                <Link 
+                                    :href="route('artists.show', album.artist.id)" 
+                                    class="text-xl text-gray-600 hover:text-gray-900 mb-4 block"
+                                >
                                     {{ album.artist.name }}
                                 </Link>
                                 <div class="mt-4">

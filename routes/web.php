@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/artists', [ArtistController::class, 'index'])
         ->middleware(['auth', 'verified'])->name('artists');
+    Route::get('/artists/{artist}', [ArtistController::class, 'show'])
+        ->middleware(['auth', 'verified'])->name('artists.show');
 
     Route::get('/albums', [AlbumController::class, 'index'])
         ->middleware(['auth', 'verified'])->name('albums');
