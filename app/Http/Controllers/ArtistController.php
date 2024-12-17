@@ -10,7 +10,7 @@ class ArtistController extends Controller
 {
     public function index()
     {
-        $artists = auth()->user()->artists()
+        $myArtists = auth()->user()->artists()
             ->withCount(['albums' => function($query) {
                 $query->whereHas('users', function($q) {
                     $q->where('users.id', auth()->id());
@@ -19,8 +19,20 @@ class ArtistController extends Controller
             ->orderBy('name')
             ->get();
 
+        $otherArtists = Artist::whereDoesntHave('users', function($query) {
+                $query->where('users.id', auth()->id());
+            })
+            ->whereHas('users')
+            ->with(['users' => function($query) {
+                $query->select('users.id', 'users.name');
+            }])
+            ->inRandomOrder()
+            ->limit(20)
+            ->get();
+
         return Inertia::render('Artists/Index', [
-            'artists' => $artists
+            'myArtists' => $myArtists,
+            'otherArtists' => $otherArtists
         ]);
     }
 

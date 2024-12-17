@@ -23,10 +23,12 @@
                     <span class="block sm:inline">{{ $page.props.flash.success }}</span>
                 </div>
 
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">
+                <!-- My Artists Section -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-8">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold mb-6">My Artists</h2>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                            <div v-for="artist in artists" :key="artist.id" class="flex flex-col items-center">
+                            <div v-for="artist in myArtists" :key="artist.id" class="flex flex-col items-center">
                                 <div class="relative group">
                                     <Link :href="route('artists.show', artist.id)">
                                         <img :src="artist.spotify_image_url" :alt="artist.name" class="w-32 h-32 rounded-full shadow-lg transition-transform duration-200 group-hover:scale-105">
@@ -39,6 +41,39 @@
                                     {{ artist.name }}
                                 </Link>
                                 <p class="text-sm text-gray-500">{{ artist.albums_count }} albums</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Artists Section -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold mb-6">Other Artists You Might Like</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            <div v-for="artist in otherArtists" :key="artist.id" class="flex flex-col items-center">
+                                <div class="relative group">
+                                    <button 
+                                        @click="quickAddArtist(artist)"
+                                        class="block relative"
+                                        :disabled="importing === artist.id"
+                                    >
+                                        <img 
+                                            :src="artist.spotify_image_url" 
+                                            :alt="artist.name" 
+                                            class="w-32 h-32 rounded-full shadow-lg transition-all duration-200 group-hover:opacity-75"
+                                        >
+                                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                            <span class="bg-green-500 text-white w-10 h-10 rounded-full flex items-center justify-center text-2xl font-medium shadow-lg">
+                                                {{ importing === artist.id ? '...' : '+' }}
+                                            </span>
+                                        </div>
+                                    </button>
+                                </div>
+                                <h3 class="mt-4 text-xl font-medium text-center">{{ artist.name }}</h3>
+                                <p class="text-sm text-gray-500 text-center">
+                                    Added by {{ artist.users[0].name }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -56,15 +91,36 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import ImportArtistModal from '@/Components/ImportArtistModal.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
-defineProps({
-    artists: {
+const props = defineProps({
+    myArtists: {
+        type: Array,
+        required: true
+    },
+    otherArtists: {
         type: Array,
         required: true
     }
 });
 
 const showImportModal = ref(false);
+const importing = ref(null);
+
+const quickAddArtist = (artist) => {
+    importing.value = artist.id;
+    
+    router.post(route('artists.import'), {
+        name: artist.name,
+        spotify_id: artist.spotify_id,
+        spotify_uri: artist.spotify_uri,
+        spotify_image_url: artist.spotify_image_url
+    }, {
+        preserveScroll: true,
+        onFinish: () => {
+            importing.value = null;
+        }
+    });
+};
 </script> 
