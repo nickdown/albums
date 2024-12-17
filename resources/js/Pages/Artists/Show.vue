@@ -21,6 +21,15 @@
                         <div v-if="showMenu" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                             <div class="py-1">
                                 <button
+                                    @click="showImportModal = true; showMenu = false"
+                                    class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-2"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                    Import Album
+                                </button>
+                                <button
                                     @click="showDeleteModal = true; showMenu = false"
                                     class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-2"
                                 >
@@ -112,12 +121,20 @@
             @close="showDeleteModal = false"
             @confirm="deleteArtist"
         />
+
+        <ImportAlbumModal
+            :show="showImportModal"
+            :artist-id="artist.id"
+            :artist-name="artist.name"
+            @close="showImportModal = false"
+        />
     </AuthenticatedLayout>
 </template>
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue';
+import ImportAlbumModal from '@/Components/ImportAlbumModal.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, onMounted, onUnmounted } from 'vue';
 
@@ -129,6 +146,7 @@ const props = defineProps({
 });
 
 const showDeleteModal = ref(false);
+const showImportModal = ref(false);
 const showMenu = ref(false);
 const menuRef = ref(null);
 
