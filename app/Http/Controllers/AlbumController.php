@@ -94,7 +94,13 @@ class AlbumController extends Controller
         ]);
 
         foreach ($request->albums as $albumData) {
-            // Find or create the album
+            // First, ensure the artist is in the user's collection
+            $artist = \App\Models\Artist::findOrFail($albumData['artist_id']);
+            if (!auth()->user()->artists()->where('artists.id', $artist->id)->exists()) {
+                auth()->user()->artists()->attach($artist->id);
+            }
+
+            // Then handle the album
             $album = Album::firstOrCreate(
                 ['spotify_id' => $albumData['spotify_id']],
                 [
