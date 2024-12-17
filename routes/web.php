@@ -41,8 +41,6 @@ Route::middleware('auth')->group(function () {
         ->middleware(['auth', 'verified'])->name('albums');
     Route::get('/albums/{album}', [AlbumController::class, 'show'])
         ->middleware(['auth', 'verified'])->name('albums.show');
-    Route::post('/albums/{album}/resync', [AlbumController::class, 'resync'])
-        ->middleware(['auth', 'verified'])->name('albums.resync');
     Route::post('/albums/search', [AlbumController::class, 'search'])
         ->middleware(['auth', 'verified'])->name('albums.search');
     Route::post('/albums/import', [AlbumController::class, 'import'])

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Album;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Aerni\Spotify\Facades\SpotifyFacade as Spotify;
 use Inertia\Inertia;
 
@@ -29,35 +28,6 @@ class AlbumController extends Controller
         return Inertia::render('Albums/Show', [
             'album' => $album
         ]);
-    }
-
-    public function resync(Album $album)
-    {
-        // Check if user has access to this album
-        if (!auth()->user()->albums()->where('albums.id', $album->id)->exists()) {
-            abort(403);
-        }
-
-        try {
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . config('services.spotify.token')
-            ])->get("https://api.spotify.com/v1/albums/{$album->spotify_id}");
-
-            if ($response->successful()) {
-                $spotifyAlbum = $response->json();
-
-                $album->update([
-                    'spotify_image_url' => $spotifyAlbum['images'][0]['url'] ?? $album->spotify_image_url,
-                    'spotify_uri' => $spotifyAlbum['uri'] ?? $album->spotify_uri,
-                ]);
-
-                return back()->with('success', 'Album data has been updated from Spotify.');
-            }
-
-            return back()->with('error', 'Could not fetch album data from Spotify.');
-        } catch (\Exception $e) {
-            return back()->with('error', 'An error occurred while syncing with Spotify.');
-        }
     }
 
     public function search(Request $request)
