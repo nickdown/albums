@@ -21,15 +21,6 @@
                         <div v-if="showMenu" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                             <div class="py-1">
                                 <button
-                                    @click="showImportModal = true; showMenu = false"
-                                    class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-2"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                                    </svg>
-                                    Import Album
-                                </button>
-                                <button
                                     @click="showDeleteModal = true; showMenu = false"
                                     class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-2"
                                 >
@@ -82,7 +73,18 @@
 
                         <!-- Albums Grid -->
                         <div class="mt-8">
-                            <h2 class="text-2xl font-semibold mb-4">Albums</h2>
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-2xl font-semibold">Albums</h2>
+                                <button
+                                    @click="showImportModal = true"
+                                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-green-600 bg-green-50 rounded-full hover:bg-green-100 transition-colors duration-200"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                    Import Albums
+                                </button>
+                            </div>
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                                 <div v-for="album in artist.albums" :key="album.id" class="flex flex-col">
                                     <Link :href="route('albums.show', album.id)" class="group">

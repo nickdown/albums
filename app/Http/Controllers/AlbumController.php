@@ -34,14 +34,14 @@ class AlbumController extends Controller
             // 2. Handle authentication properly
             // 3. Store API credentials in .env
             // 4. Use a job queue for this operation
-            
+
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . config('services.spotify.token')
             ])->get("https://api.spotify.com/v1/albums/{$album->spotify_id}");
 
             if ($response->successful()) {
                 $spotifyAlbum = $response->json();
-                
+
                 $album->update([
                     'spotify_image_url' => $spotifyAlbum['images'][0]['url'] ?? $album->spotify_image_url,
                     'spotify_uri' => $spotifyAlbum['uri'] ?? $album->spotify_uri,
@@ -59,17 +59,17 @@ class AlbumController extends Controller
     public function search(Request $request)
     {
         $artistId = $request->input('artist_id');
-        
+
         try {
             // First get the artist's Spotify ID
             $artist = \App\Models\Artist::findOrFail($artistId);
-            
+
             // Then get all their albums from Spotify
             $results = Spotify::artistAlbums($artist->spotify_id)
                 ->includeGroups('album')
                 ->limit(50)
                 ->get();
-            
+
             return response()->json([
                 'results' => collect($results['items'])->map(function($album) use ($artistId) {
                     return [
@@ -107,4 +107,4 @@ class AlbumController extends Controller
 
         return redirect()->back()->with('success', count($request->albums) . ' albums imported successfully');
     }
-} 
+}
