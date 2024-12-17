@@ -10,7 +10,15 @@ class ArtistController extends Controller
 {
     public function index()
     {
-        $artists = auth()->user()->artists()->withCount('albums')->orderBy('name')->get();
+        $artists = auth()->user()->artists()
+            ->withCount(['albums' => function($query) {
+                $query->whereHas('users', function($q) {
+                    $q->where('users.id', auth()->id());
+                });
+            }])
+            ->orderBy('name')
+            ->get();
+
         return Inertia::render('Artists/Index', [
             'artists' => $artists
         ]);
