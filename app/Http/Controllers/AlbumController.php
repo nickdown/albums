@@ -120,4 +120,12 @@ class AlbumController extends Controller
 
         return redirect()->back()->with('success', count($request->albums) . ' albums added to your collection');
     }
+
+    public function destroy(Album $album)
+    {
+        $user = auth()->user();
+        $user->albums()->detach($album->id);
+
+        return redirect()->route('albums')->with('success', 'Album removed from your collection');
+    }
 }

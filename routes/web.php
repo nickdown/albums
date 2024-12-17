@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
         ->middleware(['auth', 'verified'])->name('albums');
     Route::get('/albums/{album}', [AlbumController::class, 'show'])
         ->middleware(['auth', 'verified'])->name('albums.show');
+    Route::delete('/albums/{album}', [AlbumController::class, 'destroy'])
+        ->middleware(['auth', 'verified'])->name('albums.destroy');
     Route::post('/albums/search', [AlbumController::class, 'search'])
         ->middleware(['auth', 'verified'])->name('albums.search');
     Route::post('/albums/import', [AlbumController::class, 'import'])
