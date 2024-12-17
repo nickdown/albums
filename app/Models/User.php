@@ -38,11 +38,22 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    public function artists()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsToMany(Artist::class)
+            ->withTimestamps()
+            ->orderBy('name');
+    }
+
+    public function albums()
+    {
+        return $this->belongsToMany(Album::class)
+            ->withTimestamps()
+            ->orderBy('name');
     }
 }

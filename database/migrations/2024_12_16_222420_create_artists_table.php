@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('artists', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('spotify_id');
+            $table->string('spotify_id')->unique();
             $table->string('spotify_uri');
             $table->string('spotify_image_url');
-            $table->timestamps();
         });
     }
 

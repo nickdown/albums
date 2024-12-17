@@ -38,18 +38,22 @@ class ArtistImportController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'spotify_id' => 'required|string|unique:artists,spotify_id',
+            'spotify_id' => 'required|string',
             'spotify_uri' => 'required|string',
             'spotify_image_url' => 'required|string'
         ]);
 
-        $artist = Artist::create($request->only([
-            'name',
-            'spotify_id',
-            'spotify_uri',
-            'spotify_image_url'
-        ]));
+        // Find or create the artist
+        $artist = Artist::firstOrCreate(
+            ['spotify_id' => $request->spotify_id],
+            $request->only(['name', 'spotify_uri', 'spotify_image_url'])
+        );
 
-        return redirect()->route('artists.show', $artist)->with('success', 'Artist imported successfully');
+        // Attach the artist to the user if not already attached
+        if (!auth()->user()->artists()->where('artists.id', $artist->id)->exists()) {
+            auth()->user()->artists()->attach($artist->id);
+        }
+
+        return redirect()->route('artists.show', $artist)->with('success', 'Artist added to your collection');
     }
 }
