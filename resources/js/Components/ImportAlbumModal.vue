@@ -2,7 +2,7 @@
     <Modal :show="show" @close="closeModal">
         <div class="p-6">
             <h2 class="text-lg font-medium text-gray-900 mb-4">
-                Import Albums for {{ artistName }}
+                Add Albums for {{ artistName }}
             </h2>
 
             <!-- Error Message -->
@@ -52,7 +52,7 @@
                                 {{ selectedAlbums.includes(album.spotify_id) ? 'Selected' : 'Select' }}
                             </button>
                         </template>
-                        <span v-else class="text-gray-500">Already imported</span>
+                        <span v-else class="text-gray-500">Already in collection</span>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                         :disabled="selectedAlbums.length === 0 || importing"
                         @click="importSelected"
                     >
-                        {{ importing ? 'Importing...' : `Import ${selectedAlbums.length} Albums` }}
+                        {{ importing ? 'Adding...' : `Add ${selectedAlbums.length} Albums` }}
                     </button>
                 </div>
             </div>

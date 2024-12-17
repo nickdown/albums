@@ -15,13 +15,6 @@
                                 <div class="relative group">
                                     <Link :href="route('albums.show', album.id)">
                                         <img :src="album.spotify_image_url" :alt="album.name" class="w-full h-auto rounded-lg shadow-lg transition-transform duration-200 group-hover:scale-105">
-                                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-200 rounded-lg flex items-center justify-center">
-                                            <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                                <button class="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-colors duration-200">
-                                                    Play
-                                                </button>
-                                            </div>
-                                        </div>
                                     </Link>
                                 </div>
                                 <Link 

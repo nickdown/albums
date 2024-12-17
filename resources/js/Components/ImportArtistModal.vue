@@ -2,7 +2,7 @@
     <Modal :show="show" @close="closeModal">
         <div class="p-6">
             <h2 class="text-lg font-medium text-gray-900 mb-4">
-                Import Artist from Spotify
+                Add Artist from Spotify
             </h2>
 
             <!-- Error Message -->
