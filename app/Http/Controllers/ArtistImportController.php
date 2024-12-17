@@ -25,7 +25,11 @@ class ArtistImportController extends Controller
                         'spotify_id' => $artist['id'],
                         'spotify_uri' => $artist['uri'],
                         'spotify_image_url' => $artist['images'][0]['url'] ?? null,
-                        'already_imported' => Artist::where('spotify_id', $artist['id'])->exists()
+                        'already_imported' => Artist::where('spotify_id', $artist['id'])
+                            ->whereHas('users', function($query) {
+                                $query->where('users.id', auth()->id());
+                            })
+                            ->exists()
                     ];
                 })
             ]);

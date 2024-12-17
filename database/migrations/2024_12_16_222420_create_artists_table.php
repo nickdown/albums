@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('spotify_id')->unique();
             $table->string('spotify_uri');
             $table->string('spotify_image_url');
+            $table->timestamps();
         });
     }
 
