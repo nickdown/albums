@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function () {
         ->middleware(['auth', 'verified'])->name('artists');
     Route::get('/artists/{artist}', [ArtistController::class, 'show'])
         ->middleware(['auth', 'verified'])->name('artists.show');
+    Route::delete('/artists/{artist}', [ArtistController::class, 'destroy'])
+        ->middleware(['auth', 'verified'])->name('artists.destroy');
     Route::post('/artists/search', [ArtistImportController::class, 'search'])
         ->middleware(['auth', 'verified'])->name('artists.search');
     Route::post('/artists/import', [ArtistImportController::class, 'store'])

@@ -26,4 +26,16 @@ class ArtistController extends Controller
             'artist' => $artist
         ]);
     }
+
+    public function destroy(Artist $artist)
+    {
+        try {
+            $artist->albums()->delete();
+            $artist->delete();
+            
+            return redirect()->route('artists')->with('success', 'Artist and their albums have been deleted.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to delete artist. Please try again.');
+        }
+    }
 }

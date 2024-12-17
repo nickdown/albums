@@ -5,12 +5,44 @@
         <template #header>
             <div class="flex items-center justify-between">
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ artist.name }}</h2>
-                <Link :href="route('artists')" class="text-sm text-gray-600 hover:text-gray-900">← Back to Artists</Link>
+                <div class="flex items-center gap-4">
+                    <div class="relative" ref="menuRef">
+                        <button
+                            @click="showMenu = !showMenu"
+                            class="p-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                            aria-label="More options"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                            </svg>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div v-if="showMenu" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                            <div class="py-1">
+                                <button
+                                    @click="showDeleteModal = true; showMenu = false"
+                                    class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-2"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                    Delete Artist
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <Link :href="route('artists')" class="text-sm text-gray-600 hover:text-gray-900">← Back to Artists</Link>
+                </div>
             </div>
         </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div v-if="$page.props.flash?.error" class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                    <span class="block sm:inline">{{ $page.props.flash.error }}</span>
+                </div>
+
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <!-- Artist Header -->
@@ -73,17 +105,52 @@
                 </div>
             </div>
         </div>
+
+        <DeleteConfirmationModal
+            :show="showDeleteModal"
+            :item-name="artist.name"
+            @close="showDeleteModal = false"
+            @confirm="deleteArtist"
+        />
     </AuthenticatedLayout>
 </template>
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue';
+import { Head, Link, router } from '@inertiajs/vue3';
+import { ref, onMounted, onUnmounted } from 'vue';
 
-defineProps({
+const props = defineProps({
     artist: {
         type: Object,
         required: true
     }
 });
+
+const showDeleteModal = ref(false);
+const showMenu = ref(false);
+const menuRef = ref(null);
+
+const handleClickOutside = (event) => {
+    if (menuRef.value && !menuRef.value.contains(event.target)) {
+        showMenu.value = false;
+    }
+};
+
+onMounted(() => {
+    document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+    document.removeEventListener('click', handleClickOutside);
+});
+
+const deleteArtist = () => {
+    router.delete(route('artists.destroy', props.artist.id), {
+        onFinish: () => {
+            showDeleteModal.value = false;
+        }
+    });
+};
 </script> 
