@@ -12,7 +12,9 @@ class Artist extends Model
 
     protected $fillable = [
         'name',
-        'spotify_id'
+        'spotify_id',
+        'spotify_uri',
+        'spotify_image_url'
     ];
 
     public function albums(): HasMany
