@@ -49,9 +49,9 @@
                         v-if="!artist.already_imported"
                         @click="importArtist(artist)"
                         class="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-200"
-                        :disabled="importing"
+                        :disabled="importingIds.has(artist.spotify_id)"
                     >
-                        {{ importing ? 'Importing...' : 'Import' }}
+                        {{ importingIds.has(artist.spotify_id) ? 'Importing...' : 'Import' }}
                     </button>
                     <span v-else class="text-gray-500">Already imported</span>
                 </div>
@@ -92,13 +92,14 @@ const emit = defineEmits(['close']);
 const searchQuery = ref('');
 const searchResults = ref([]);
 const searching = ref(false);
-const importing = ref(false);
+const importingIds = ref(new Set());
 const error = ref(null);
 
 const closeModal = () => {
     searchQuery.value = '';
     searchResults.value = [];
     error.value = null;
+    importingIds.value.clear();
     emit('close');
 };
 
@@ -136,7 +137,7 @@ const debounceSearch = debounce(() => {
 }, 300);
 
 const importArtist = (artist) => {
-    importing.value = true;
+    importingIds.value.add(artist.spotify_id);
     error.value = null;
     
     router.post(route('artists.import'), {
@@ -147,9 +148,10 @@ const importArtist = (artist) => {
         },
         onError: (errors) => {
             error.value = Object.values(errors)[0];
+            importingIds.value.delete(artist.spotify_id);
         },
         onFinish: () => {
-            importing.value = false;
+            importingIds.value.delete(artist.spotify_id);
         }
     });
 };
