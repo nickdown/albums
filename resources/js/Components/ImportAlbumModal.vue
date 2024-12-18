@@ -169,12 +169,8 @@ const importSelected = () => {
     const selectedAlbumsData = albums.value
         .filter(album => selectedAlbums.value.includes(album.spotify_id))
         .map(album => ({
-            name: album.name,
-            artist_id: props.artistId,
             spotify_id: album.spotify_id,
-            spotify_uri: album.spotify_uri,
-            spotify_image_url: album.spotify_image_url,
-            release_date: album.release_date
+            artist_id: props.artistId
         }));
     
     router.post(route('albums.import'), {

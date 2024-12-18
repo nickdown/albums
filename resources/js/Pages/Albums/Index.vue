@@ -109,12 +109,8 @@ const quickAddAlbum = (album) => {
     
     router.post(route('albums.import'), {
         albums: [{
-            name: album.name,
-            artist_id: album.artist.id,
             spotify_id: album.spotify_id,
-            spotify_uri: album.spotify_uri,
-            spotify_image_url: album.spotify_image_url,
-            release_date: album.release_date
+            artist_id: album.artist.id
         }]
     }, {
         preserveScroll: true,

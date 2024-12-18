@@ -85,40 +85,47 @@ class AlbumController extends Controller
     {
         $request->validate([
             'albums' => 'required|array',
-            'albums.*.name' => 'required|string',
-            'albums.*.artist_id' => 'required|exists:artists,id',
             'albums.*.spotify_id' => 'required|string',
-            'albums.*.spotify_uri' => 'required|string',
-            'albums.*.spotify_image_url' => 'required|string',
-            'albums.*.release_date' => 'required|date'
+            'albums.*.artist_id' => 'required|exists:artists,id'
         ]);
 
-        foreach ($request->albums as $albumData) {
-            // First, ensure the artist is in the user's collection
-            $artist = \App\Models\Artist::findOrFail($albumData['artist_id']);
-            if (!auth()->user()->artists()->where('artists.id', $artist->id)->exists()) {
-                auth()->user()->artists()->attach($artist->id);
-            }
+        try {
+            foreach ($request->albums as $albumData) {
+                // First, ensure the artist is in the user's collection
+                $artist = \App\Models\Artist::findOrFail($albumData['artist_id']);
+                if (!auth()->user()->artists()->where('artists.id', $artist->id)->exists()) {
+                    auth()->user()->artists()->attach($artist->id);
+                }
 
-            // Then handle the album
-            $album = Album::firstOrCreate(
-                ['spotify_id' => $albumData['spotify_id']],
-                [
-                    'name' => $albumData['name'],
+                // Fetch fresh album data from Spotify
+                $spotifyAlbum = Spotify::album($albumData['spotify_id'])->get();
+
+                // Create album data array from Spotify response
+                $freshAlbumData = [
+                    'name' => $spotifyAlbum['name'],
                     'artist_id' => $albumData['artist_id'],
-                    'spotify_uri' => $albumData['spotify_uri'],
-                    'spotify_image_url' => $albumData['spotify_image_url'],
-                    'release_date' => $albumData['release_date']
-                ]
-            );
+                    'spotify_id' => $spotifyAlbum['id'],
+                    'spotify_uri' => $spotifyAlbum['uri'],
+                    'spotify_image_url' => $spotifyAlbum['images'][0]['url'] ?? null,
+                    'release_date' => $spotifyAlbum['release_date']
+                ];
 
-            // Attach the album to the user if not already attached
-            if (!auth()->user()->albums()->where('albums.id', $album->id)->exists()) {
-                auth()->user()->albums()->attach($album->id);
+                // Find or create the album with fresh data
+                $album = Album::firstOrCreate(
+                    ['spotify_id' => $freshAlbumData['spotify_id']],
+                    $freshAlbumData
+                );
+
+                // Attach the album to the user if not already attached
+                if (!auth()->user()->albums()->where('albums.id', $album->id)->exists()) {
+                    auth()->user()->albums()->attach($album->id);
+                }
             }
-        }
 
-        return redirect()->back()->with('success', count($request->albums) . ' albums added to your collection');
+            return redirect()->back()->with('success', count($request->albums) . ' albums added to your collection');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to fetch album details from Spotify. Please try again.');
+        }
     }
 
     public function destroy(Album $album)
