@@ -81,6 +81,15 @@ class AlbumController extends Controller
         }
     }
 
+    protected function formatReleaseDate($date, $precision)
+    {
+        return match ($precision) {
+            'year' => $date . '-01-01',
+            'month' => $date . '-01',
+            default => $date,
+        };
+    }
+
     public function import(Request $request)
     {
         $request->validate([
@@ -107,7 +116,10 @@ class AlbumController extends Controller
                     'spotify_id' => $spotifyAlbum['id'],
                     'spotify_uri' => $spotifyAlbum['uri'],
                     'spotify_image_url' => $spotifyAlbum['images'][0]['url'] ?? null,
-                    'release_date' => $spotifyAlbum['release_date']
+                    'release_date' => $this->formatReleaseDate(
+                        $spotifyAlbum['release_date'],
+                        $spotifyAlbum['release_date_precision']
+                    )
                 ];
 
                 // Find or create the album with fresh data
@@ -124,6 +136,10 @@ class AlbumController extends Controller
 
             return redirect()->back()->with('success', count($request->albums) . ' albums added to your collection');
         } catch (\Exception $e) {
+            logger()->error('Failed to import album', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
             return back()->with('error', 'Failed to fetch album details from Spotify. Please try again.');
         }
     }
