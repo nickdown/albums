@@ -130,10 +130,7 @@ const quickAdd = (activity) => {
     
     if (activity.type === 'artist') {
         router.post(route('artists.import'), {
-            name: activity.name,
-            spotify_id: activity.spotify_id,
-            spotify_uri: activity.spotify_uri,
-            spotify_image_url: activity.image_url
+            spotify_id: activity.spotify_id
         }, {
             preserveScroll: true,
             onFinish: () => {

@@ -41,23 +41,35 @@ class ArtistImportController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
-            'spotify_id' => 'required|string',
-            'spotify_uri' => 'required|string',
-            'spotify_image_url' => 'required|string'
+            'spotify_id' => 'required|string'
         ]);
 
-        // Find or create the artist
-        $artist = Artist::firstOrCreate(
-            ['spotify_id' => $request->spotify_id],
-            $request->only(['name', 'spotify_uri', 'spotify_image_url'])
-        );
+        try {
+            // Fetch artist details from Spotify
+            $spotifyArtist = Spotify::artist($request->spotify_id)->get();
 
-        // Attach the artist to the user if not already attached
-        if (!auth()->user()->artists()->where('artists.id', $artist->id)->exists()) {
-            auth()->user()->artists()->attach($artist->id);
+            // Create artist data array from Spotify response
+            $artistData = [
+                'name' => $spotifyArtist['name'],
+                'spotify_id' => $spotifyArtist['id'],
+                'spotify_uri' => $spotifyArtist['uri'],
+                'spotify_image_url' => $spotifyArtist['images'][0]['url'] ?? null
+            ];
+
+            // Find or create the artist
+            $artist = Artist::firstOrCreate(
+                ['spotify_id' => $artistData['spotify_id']],
+                $artistData
+            );
+
+            // Attach the artist to the user if not already attached
+            if (!auth()->user()->artists()->where('artists.id', $artist->id)->exists()) {
+                auth()->user()->artists()->attach($artist->id);
+            }
+
+            return redirect()->route('artists.show', $artist)->with('success', 'Artist added to your collection');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to fetch artist details from Spotify. Please try again.');
         }
-
-        return redirect()->route('artists.show', $artist)->with('success', 'Artist added to your collection');
     }
 }

@@ -112,10 +112,7 @@ const quickAddArtist = (artist) => {
     importing.value = artist.id;
     
     router.post(route('artists.import'), {
-        name: artist.name,
-        spotify_id: artist.spotify_id,
-        spotify_uri: artist.spotify_uri,
-        spotify_image_url: artist.spotify_image_url
+        spotify_id: artist.spotify_id
     }, {
         preserveScroll: true,
         onFinish: () => {
