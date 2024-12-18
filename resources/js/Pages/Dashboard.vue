@@ -115,13 +115,28 @@ const props = defineProps({
 
 const importing = ref(null);
 
-const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
+const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    const now = new Date();
+    const diffInHours = (now - date) / (1000 * 60 * 60);
+
+    // If less than 24 hours ago, show relative time
+    if (diffInHours < 24) {
+        if (diffInHours < 1) {
+            const minutes = Math.floor((now - date) / (1000 * 60));
+            return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
+        }
+        const hours = Math.floor(diffInHours);
+        return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+    }
+
+    // Otherwise show the full date
+    return date.toLocaleString('en-US', {
         month: 'long',
         day: 'numeric',
         hour: 'numeric',
-        minute: 'numeric'
+        minute: 'numeric',
+        hour12: true
     });
 };
 
