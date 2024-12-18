@@ -35,14 +35,25 @@ class AlbumController extends Controller
 
     public function show(Album $album)
     {
-        // Check if user has access to this album
-        if (!auth()->user()->albums()->where('albums.id', $album->id)->exists()) {
-            abort(403);
+        $album->load(['artist', 'users' => function($query) {
+            $query->select('users.id', 'name');
+        }]);
+
+        if (auth()->check()) {
+            // Check if user has access to this album
+            $inCollection = auth()->user()->albums()->where('albums.id', $album->id)->exists();
+            
+            return Inertia::render('Albums/Show', [
+                'album' => array_merge($album->toArray(), [
+                    'in_collection' => $inCollection
+                ])
+            ]);
         }
 
-        $album->load('artist');
-        return Inertia::render('Albums/Show', [
-            'album' => $album
+        return Inertia::render('Albums/GuestShow', [
+            'album' => $album,
+            'canLogin' => \Route::has('login'),
+            'canRegister' => \Route::has('register'),
         ]);
     }
 

@@ -91,22 +91,27 @@
                     </p>
                 </div>
                 <div class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-4">
-                    <div v-for="album in recentAlbums" :key="album.id" class="flex flex-col">
+                    <Link 
+                        v-for="album in recentAlbums" 
+                        :key="album.id" 
+                        :href="route('albums.preview', album.id)"
+                        class="flex flex-col group"
+                    >
                         <div class="relative">
                             <img 
                                 :src="album.image_url" 
                                 :alt="album.name"
-                                class="aspect-square w-full rounded-lg object-cover shadow-lg"
+                                class="aspect-square w-full rounded-lg object-cover shadow-lg transition-transform duration-200 group-hover:scale-105"
                             >
                         </div>
-                        <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900">
+                        <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
                             {{ album.name }}
                         </h3>
                         <p class="text-sm text-gray-600">{{ album.artist_name }}</p>
                         <p class="mt-1 text-sm text-gray-500">
                             Added by {{ album.added_by }}
                         </p>
-                    </div>
+                    </Link>
                 </div>
             </div>
         </div>
