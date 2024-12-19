@@ -107,7 +107,7 @@
                         <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
                             {{ album.name }}
                         </h3>
-                        <p class="text-sm text-gray-600">{{ album.artist_name }}</p>
+                        <p class="text-sm text-gray-600">by {{ album.artist_name }}</p>
                         <p class="mt-1 text-sm text-gray-500">
                             Added by {{ album.added_by }}
                         </p>

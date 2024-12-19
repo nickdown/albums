@@ -10,10 +10,10 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        $recentAlbums = Album::with(['users' => function ($query) {
+        $recentAlbums = Album::with(['artist', 'users' => function ($query) {
                 $query->select('users.id', 'name');
             }])
-            ->select('id', 'name', 'spotify_image_url', 'artist_name', 'release_date')
+            ->select('id', 'name', 'spotify_image_url', 'artist_id', 'release_date')
             ->whereHas('users')
             ->orderBy('created_at', 'desc')
             ->take(40)
@@ -22,7 +22,7 @@ class WelcomeController extends Controller
                 return [
                     'id' => $album->id,
                     'name' => $album->name,
-                    'artist_name' => $album->artist_name,
+                    'artist_name' => $album->artist->name,
                     'image_url' => $album->spotify_image_url,
                     'release_date' => $album->release_date,
                     'added_by' => $album->users->first()->name
