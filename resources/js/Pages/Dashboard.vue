@@ -61,7 +61,13 @@
                                 <!-- Activity Details -->
                                 <div class="flex-grow">
                                     <div class="font-medium">
-                                        {{ activity.user_name }} added 
+                                        <Link 
+                                            :href="route('users.show', activity.user_id)"
+                                            class="text-gray-900 hover:text-gray-600"
+                                        >
+                                            {{ activity.user_name }}
+                                        </Link>
+                                        added 
                                         <span v-if="activity.type === 'album'">
                                             the album "{{ activity.name }}" by {{ activity.artist_name }}
                                         </span>

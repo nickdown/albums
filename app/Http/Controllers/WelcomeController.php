@@ -19,13 +19,15 @@ class WelcomeController extends Controller
             ->take(40)
             ->get()
             ->map(function ($album) {
+                $user = $album->users->first();
                 return [
                     'id' => $album->id,
                     'name' => $album->name,
                     'artist_name' => $album->artist->name,
                     'image_url' => $album->spotify_image_url,
                     'release_date' => $album->release_date,
-                    'added_by' => $album->users->first()->name
+                    'added_by' => $user->name,
+                    'added_by_id' => $user->id
                 ];
             });
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\AlbumPreviewController;
 use App\Http\Controllers\ArtistImportController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])
@@ -14,6 +15,10 @@ Route::get('/', [WelcomeController::class, 'index'])
 
 Route::get('/preview/albums/{album}', [AlbumPreviewController::class, 'show'])
     ->name('albums.preview');
+
+// User profiles are public
+Route::get('/users/{user}', [UserProfileController::class, 'show'])
+    ->name('users.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

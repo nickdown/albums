@@ -109,7 +109,13 @@
                         </h3>
                         <p class="text-sm text-gray-600">by {{ album.artist_name }}</p>
                         <p class="mt-1 text-sm text-gray-500">
-                            Added by {{ album.added_by }}
+                            Added by 
+                            <Link 
+                                :href="route('users.show', album.added_by_id)"
+                                class="text-gray-900 hover:text-gray-600"
+                            >
+                                {{ album.added_by }}
+                            </Link>
                         </p>
                     </Link>
                 </div>

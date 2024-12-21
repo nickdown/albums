@@ -13,7 +13,7 @@ class DashboardController extends Controller
     public function index()
     {
         // Get recent artist additions from other users
-        $recentArtistActivity = Artist::select('artists.*', 'users.name as user_name', 'artist_user.created_at as added_at')
+        $recentArtistActivity = Artist::select('artists.*', 'users.id as user_id', 'users.name as user_name', 'artist_user.created_at as added_at')
             ->join('artist_user', 'artists.id', '=', 'artist_user.artist_id')
             ->join('users', 'users.id', '=', 'artist_user.user_id')
             ->where('users.id', '!=', auth()->id())
@@ -25,6 +25,7 @@ class DashboardController extends Controller
                     'type' => 'artist',
                     'name' => $item->name,
                     'image_url' => $item->spotify_image_url,
+                    'user_id' => $item->user_id,
                     'user_name' => $item->user_name,
                     'added_at' => Carbon::parse($item->added_at)->toISOString(),
                     'id' => $item->id,
@@ -35,7 +36,7 @@ class DashboardController extends Controller
             });
 
         // Get recent album additions from other users
-        $recentAlbumActivity = Album::select('albums.*', 'artists.name as artist_name', 'users.name as user_name', 'album_user.created_at as added_at')
+        $recentAlbumActivity = Album::select('albums.*', 'artists.name as artist_name', 'users.id as user_id', 'users.name as user_name', 'album_user.created_at as added_at')
             ->join('album_user', 'albums.id', '=', 'album_user.album_id')
             ->join('users', 'users.id', '=', 'album_user.user_id')
             ->join('artists', 'artists.id', '=', 'albums.artist_id')
@@ -49,6 +50,7 @@ class DashboardController extends Controller
                     'name' => $item->name,
                     'artist_name' => $item->artist_name,
                     'image_url' => $item->spotify_image_url,
+                    'user_id' => $item->user_id,
                     'user_name' => $item->user_name,
                     'added_at' => Carbon::parse($item->added_at)->toISOString(),
                     'id' => $item->id,
