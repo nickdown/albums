@@ -28,16 +28,16 @@
                 <div class="p-6">
                     <h2 class="text-2xl font-bold mb-6">Artists</h2>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                        <div v-for="artist in profile.artists" :key="artist.id" class="flex flex-col items-center">
-                            <Link :href="route('artists.show', artist.id)" class="group">
-                                <div class="relative">
+                        <div v-for="artist in profile.artists" :key="artist.id" class="flex flex-col text-center">
+                            <Link :href="route('artists.show', artist.id)" class="group flex flex-col items-center">
+                                <div class="relative group w-24 h-24">
                                     <img 
                                         :src="artist.spotify_image_url" 
                                         :alt="artist.name"
-                                        class="w-24 h-24 rounded-full shadow-lg transition-transform duration-200 group-hover:scale-105"
+                                        class="w-full h-full rounded-full shadow-lg transition-transform duration-200 group-hover:scale-105 object-cover"
                                     >
                                 </div>
-                                <div class="mt-2 text-center">
+                                <div class="mt-3">
                                     <h3 class="font-medium group-hover:text-gray-600 transition-colors duration-200">
                                         {{ artist.name }}
                                     </h3>

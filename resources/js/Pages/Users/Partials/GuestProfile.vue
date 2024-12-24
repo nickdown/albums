@@ -82,17 +82,19 @@
                     <div class="p-6">
                         <h2 class="text-2xl font-bold mb-6">Artists</h2>
                         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                            <div v-for="artist in profile.artists" :key="artist.id" class="flex flex-col items-center">
-                                <div class="relative">
-                                    <img 
-                                        :src="artist.spotify_image_url" 
-                                        :alt="artist.name"
-                                        class="w-24 h-24 rounded-full shadow-lg"
-                                    >
-                                </div>
-                                <div class="mt-2 text-center">
-                                    <h3 class="font-medium">{{ artist.name }}</h3>
-                                    <p class="text-sm text-gray-500">{{ artist.albums_count }} albums</p>
+                            <div v-for="artist in profile.artists" :key="artist.id" class="flex flex-col text-center">
+                                <div class="group flex flex-col items-center">
+                                    <div class="relative group w-24 h-24">
+                                        <img
+                                            :src="artist.spotify_image_url"
+                                            :alt="artist.name"
+                                            class="w-full h-full rounded-full shadow-lg transition-transform duration-200 group-hover:scale-105 object-cover"
+                                        >
+                                    </div>
+                                    <div class="mt-3">
+                                        <h3 class="font-medium">{{ artist.name }}</h3>
+                                        <p class="text-sm text-gray-500">{{ artist.albums_count }} albums</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -107,8 +109,8 @@
                             <div v-for="album in profile.albums" :key="album.id" class="flex flex-col">
                                 <Link :href="route('albums.preview', album.id)" class="group">
                                     <div class="relative">
-                                        <img 
-                                            :src="album.spotify_image_url" 
+                                        <img
+                                            :src="album.spotify_image_url"
                                             :alt="album.name"
                                             class="w-full aspect-square rounded-lg shadow-lg transition-transform duration-200 group-hover:scale-105"
                                         >
@@ -141,4 +143,4 @@ defineProps({
         required: true
     }
 });
-</script> 
+</script>
