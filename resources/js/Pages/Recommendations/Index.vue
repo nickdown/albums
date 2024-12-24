@@ -15,13 +15,15 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <div v-if="recommendations.length === 0" class="text-center py-12 text-gray-500">
-                            No recommendations yet
+                            You have no recommendations right now.
+                            <br/>
+                            Be the change you wish to see? View an album or artist to recommend it to friends.
                         </div>
                         <div v-else class="space-y-6">
                             <div v-for="recommendation in recommendations" :key="recommendation.id" class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
                                 <Link :href="recommendation.url" class="shrink-0">
-                                    <img 
-                                        :src="recommendation.image_url" 
+                                    <img
+                                        :src="recommendation.image_url"
                                         :alt="recommendation.name"
                                         :class="{
                                             'rounded-full': recommendation.type === 'artist',
@@ -33,7 +35,7 @@
                                 <div class="flex-1 min-w-0">
                                     <div class="flex items-start justify-between gap-x-4">
                                         <div>
-                                            <Link 
+                                            <Link
                                                 :href="recommendation.url"
                                                 class="text-lg font-medium hover:text-gray-600"
                                             >
@@ -83,4 +85,4 @@ const removeRecommendation = (id) => {
         });
     }
 };
-</script> 
+</script>

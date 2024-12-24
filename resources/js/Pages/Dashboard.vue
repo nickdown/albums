@@ -20,29 +20,7 @@
                             <div v-for="activity in recentActivity" :key="activity.type + activity.id" class="flex items-center gap-6">
                                 <!-- Activity Image -->
                                 <div class="flex-shrink-0">
-                                    <button 
-                                        v-if="!activity.already_added"
-                                        @click="quickAdd(activity)"
-                                        class="relative group"
-                                        :disabled="importing === activity.id"
-                                    >
-                                        <img 
-                                            :src="activity.image_url" 
-                                            :alt="activity.name"
-                                            :class="{
-                                                'w-16 h-16 rounded-full': activity.type === 'artist',
-                                                'w-16 h-16 rounded-lg': activity.type === 'album'
-                                            }"
-                                            class="shadow-lg transition-all duration-200 group-hover:opacity-75"
-                                        >
-                                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                            <span class="bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center text-xl font-medium shadow-lg">
-                                                {{ importing === activity.id ? '...' : '+' }}
-                                            </span>
-                                        </div>
-                                    </button>
                                     <Link 
-                                        v-else 
                                         :href="route(activity.type + 's.show', activity.id)"
                                         class="block"
                                     >
@@ -53,7 +31,7 @@
                                                 'w-16 h-16 rounded-full': activity.type === 'artist',
                                                 'w-16 h-16 rounded-lg': activity.type === 'album'
                                             }"
-                                            class="shadow-lg"
+                                            class="shadow-lg transition-all duration-200 hover:opacity-75"
                                         >
                                     </Link>
                                 </div>
@@ -69,10 +47,21 @@
                                         </Link>
                                         added 
                                         <span v-if="activity.type === 'album'">
-                                            the album "{{ activity.name }}" by {{ activity.artist_name }}
+                                            <Link 
+                                                :href="route('albums.show', activity.id)"
+                                                class="text-gray-900 hover:text-gray-600"
+                                            >
+                                                the album "{{ activity.name }}"
+                                            </Link>
+                                            by {{ activity.artist_name }}
                                         </span>
                                         <span v-else>
-                                            the artist {{ activity.name }}
+                                            <Link 
+                                                :href="route('artists.show', activity.id)"
+                                                class="text-gray-900 hover:text-gray-600"
+                                            >
+                                                the artist {{ activity.name }}
+                                            </Link>
                                         </span>
                                     </div>
                                     <div class="text-sm text-gray-500">
