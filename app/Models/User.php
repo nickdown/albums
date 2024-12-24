@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -55,5 +56,15 @@ class User extends Authenticatable
         return $this->belongsToMany(Album::class)
             ->withTimestamps()
             ->orderBy('name');
+    }
+
+    public function recommendationsSent(): HasMany
+    {
+        return $this->hasMany(Recommendation::class, 'from_user_id');
+    }
+
+    public function recommendationsReceived(): HasMany
+    {
+        return $this->hasMany(Recommendation::class, 'to_user_id');
     }
 }

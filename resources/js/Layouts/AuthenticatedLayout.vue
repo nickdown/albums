@@ -49,6 +49,12 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Albums
                                 </NavLink>
+                                <NavLink
+                                    :href="route('recommendations')"
+                                    :active="route().current('recommendations')"
+                                >
+                                    Recommendations
+                                </NavLink>
                             </div>
                         </div>
 
@@ -167,6 +173,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('albums')"
                         >
                             Albums
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('recommendations')"
+                            :active="route().current('recommendations')"
+                        >
+                            Recommendations
                         </ResponsiveNavLink>
                     </div>
 

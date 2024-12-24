@@ -8,6 +8,7 @@ use App\Http\Controllers\ArtistImportController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\RecommendationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])
@@ -43,6 +44,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/albums/{album}', [AlbumController::class, 'destroy'])->name('albums.destroy');
     Route::post('/albums/search', [AlbumController::class, 'search'])->name('albums.search');
     Route::post('/albums/import', [AlbumController::class, 'import'])->name('albums.import');
+
+    // Recommendation routes
+    Route::get('/recommendations', [RecommendationController::class, 'index'])->name('recommendations');
+    Route::post('/recommendations', [RecommendationController::class, 'store'])->name('recommendations.store');
+    Route::delete('/recommendations/{recommendation}', [RecommendationController::class, 'destroy'])->name('recommendations.destroy');
 });
 
 require __DIR__.'/auth.php';

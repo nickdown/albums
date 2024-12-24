@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artist;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -58,12 +59,18 @@ class ArtistController extends Controller
             }])
             ->orderBy('release_date', 'desc')
             ->get();
+
+        // Get all users except the current user for recommendations
+        $users = User::where('id', '!=', auth()->id())
+            ->orderBy('name')
+            ->get(['id', 'name']);
         
         return Inertia::render('Artists/Show', [
             'artist' => array_merge($artist->toArray(), [
                 'my_albums' => $myAlbums,
                 'other_albums' => $otherAlbums
-            ])
+            ]),
+            'users' => $users
         ]);
     }
 

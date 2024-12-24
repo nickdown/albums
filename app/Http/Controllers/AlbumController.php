@@ -6,6 +6,7 @@ use App\Models\Album;
 use Illuminate\Http\Request;
 use Aerni\Spotify\Facades\SpotifyFacade as Spotify;
 use Inertia\Inertia;
+use App\Models\User;
 
 class AlbumController extends Controller
 {
@@ -43,10 +44,16 @@ class AlbumController extends Controller
             // Check if user has access to this album
             $inCollection = auth()->user()->albums()->where('albums.id', $album->id)->exists();
             
+            // Get all users except the current user for recommendations
+            $users = User::where('id', '!=', auth()->id())
+                ->orderBy('name')
+                ->get(['id', 'name']);
+
             return Inertia::render('Albums/Show', [
                 'album' => array_merge($album->toArray(), [
                     'in_collection' => $inCollection
-                ])
+                ]),
+                'users' => $users
             ]);
         }
 

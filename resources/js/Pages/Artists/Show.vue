@@ -14,6 +14,9 @@
                 <div v-if="$page.props.flash?.error" class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
                     <span class="block sm:inline">{{ $page.props.flash.error }}</span>
                 </div>
+                <div v-if="$page.props.flash?.success" class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+                    <span class="block sm:inline">{{ $page.props.flash.success }}</span>
+                </div>
 
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
@@ -29,6 +32,13 @@
                             <h1 class="text-4xl font-bold mb-4">{{ artist.name }}</h1>
                             <p class="text-gray-600 mb-4">
                                 {{ artist.my_albums.length + artist.other_albums.length }} Albums 
+                                <span class="text-gray-300 mx-2">|</span>
+                                <button
+                                    @click="showRecommendModal = true"
+                                    class="text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                                >
+                                    Recommend
+                                </button>
                                 <span class="text-gray-300 mx-2">|</span>
                                 <button
                                     @click="showDeleteModal = true"
@@ -132,6 +142,14 @@
             :artist-name="artist.name"
             @close="showImportModal = false"
         />
+
+        <RecommendModal
+            :show="showRecommendModal"
+            :type="'artist'"
+            :item="artist"
+            :users="users"
+            @close="showRecommendModal = false"
+        />
     </AuthenticatedLayout>
 </template>
 
@@ -139,6 +157,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue';
 import ImportAlbumModal from '@/Components/ImportAlbumModal.vue';
+import RecommendModal from '@/Components/RecommendModal.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
@@ -146,11 +165,16 @@ const props = defineProps({
     artist: {
         type: Object,
         required: true
+    },
+    users: {
+        type: Array,
+        required: true
     }
 });
 
 const showDeleteModal = ref(false);
 const showImportModal = ref(false);
+const showRecommendModal = ref(false);
 const importing = ref(null);
 
 const deleteArtist = () => {
