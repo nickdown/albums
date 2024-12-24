@@ -34,13 +34,22 @@
                                 {{ artist.my_albums.length + artist.other_albums.length }} Albums 
                                 <span class="text-gray-300 mx-2">|</span>
                                 <button
+                                    v-if="artist.in_collection"
                                     @click="showRecommendModal = true"
                                     class="text-gray-600 hover:text-gray-900 transition-colors duration-200"
                                 >
                                     Recommend
                                 </button>
-                                <span class="text-gray-300 mx-2">|</span>
                                 <button
+                                    v-if="!artist.in_collection"
+                                    @click="quickAddArtist"
+                                    class="text-green-600 hover:text-green-700 transition-colors duration-200"
+                                >
+                                    Add to Collection
+                                </button>
+                                <span v-if="artist.in_collection" class="text-gray-300 mx-2">|</span>
+                                <button
+                                    v-if="artist.in_collection"
                                     @click="showDeleteModal = true"
                                     class="text-gray-600 hover:text-red-600 transition-colors duration-200"
                                 >
@@ -57,7 +66,7 @@
 
                         <!-- Albums Grid -->
                         <div class="mt-8">
-                            <div class="flex justify-between items-center mb-4">
+                            <div v-if="artist.in_collection" class="flex justify-between items-center mb-4">
                                 <h2 class="text-2xl font-semibold">My Albums</h2>
                                 <button
                                     @click="showImportModal = true"
@@ -69,10 +78,10 @@
                                     Add Album
                                 </button>
                             </div>
-                            <div v-if="artist.my_albums.length === 0" class="text-gray-500 text-center py-8">
+                            <div v-if="artist.my_albums.length === 0 && artist.in_collection" class="text-gray-500 text-center py-8">
                                 No albums in your collection yet
                             </div>
-                            <div v-else class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                            <div v-if="artist.my_albums.length > 0" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                                 <div v-for="album in artist.my_albums" :key="album.id" class="flex flex-col">
                                     <Link :href="route('albums.show', album.id)" class="group">
                                         <div class="relative">
@@ -95,26 +104,17 @@
 
                         <!-- Other Albums Section -->
                         <div v-if="artist.other_albums.length > 0" class="mt-12">
-                            <h2 class="text-2xl font-semibold mb-6">Other Albums by {{ artist.name }}</h2>
+                            <h2 class="text-2xl font-semibold mb-6">{{ artist.in_collection ? 'Other Albums by ' + artist.name : 'Albums by ' + artist.name }}</h2>
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                                 <div v-for="album in artist.other_albums" :key="album.id" class="flex flex-col">
                                     <div class="relative group">
-                                        <button 
-                                            @click="quickAddAlbum(album)"
-                                            class="block relative w-full"
-                                            :disabled="importing === album.id"
-                                        >
+                                        <Link :href="route('albums.show', album.id)" class="block relative w-full">
                                             <img 
                                                 :src="album.spotify_image_url" 
                                                 :alt="album.name" 
                                                 class="w-full aspect-square object-cover rounded-lg shadow-lg transition-all duration-200 group-hover:opacity-75"
                                             >
-                                            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                                <span class="bg-green-500 text-white w-10 h-10 rounded-full flex items-center justify-center text-2xl font-medium shadow-lg">
-                                                    {{ importing === album.id ? '...' : '+' }}
-                                                </span>
-                                            </div>
-                                        </button>
+                                        </Link>
                                     </div>
                                     <h3 class="mt-2 text-center font-medium">{{ album.name }}</h3>
                                     <p class="text-sm text-gray-500 text-center">{{ new Date(album.release_date).getFullYear() }}</p>
@@ -130,6 +130,7 @@
         </div>
 
         <DeleteConfirmationModal
+            v-if="artist.in_collection"
             :show="showDeleteModal"
             :item-name="artist.name"
             @close="showDeleteModal = false"
@@ -137,6 +138,7 @@
         />
 
         <ImportAlbumModal
+            v-if="artist.in_collection"
             :show="showImportModal"
             :artist-id="artist.id"
             :artist-name="artist.name"
@@ -144,6 +146,7 @@
         />
 
         <RecommendModal
+            v-if="artist.in_collection"
             :show="showRecommendModal"
             :type="'artist'"
             :item="artist"
@@ -201,6 +204,18 @@ const quickAddAlbum = (album) => {
         preserveScroll: true,
         onFinish: () => {
             importing.value = null;
+        }
+    });
+};
+
+const quickAddArtist = () => {
+    router.post(route('artists.import'), {
+        spotify_id: props.artist.spotify_id
+    }, {
+        preserveScroll: true,
+        onSuccess: () => {
+            // Refresh the page to update the UI
+            router.reload();
         }
     });
 };

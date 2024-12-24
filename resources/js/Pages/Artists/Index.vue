@@ -53,24 +53,23 @@
                         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
                             <div v-for="artist in otherArtists" :key="artist.id" class="flex flex-col items-center text-center">
                                 <div class="relative group w-24 h-24">
-                                    <button 
-                                        @click="quickAddArtist(artist)"
+                                    <Link 
+                                        :href="route('artists.show', artist.id)"
                                         class="block relative w-full h-full"
-                                        :disabled="importing === artist.id"
                                     >
                                         <img 
                                             :src="artist.spotify_image_url" 
                                             :alt="artist.name" 
                                             class="w-full h-full rounded-full shadow-lg transition-all duration-200 group-hover:opacity-75 object-cover"
                                         >
-                                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                            <span class="bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center text-xl font-medium shadow-lg">
-                                                {{ importing === artist.id ? '...' : '+' }}
-                                            </span>
-                                        </div>
-                                    </button>
+                                    </Link>
                                 </div>
-                                <h3 class="mt-3 text-base font-medium">{{ artist.name }}</h3>
+                                <Link 
+                                    :href="route('artists.show', artist.id)"
+                                    class="mt-3 text-base font-medium hover:text-gray-600 transition-colors duration-200"
+                                >
+                                    {{ artist.name }}
+                                </Link>
                                 <p class="text-sm text-gray-500">
                                     Added by {{ artist.users[0].name }}
                                 </p>

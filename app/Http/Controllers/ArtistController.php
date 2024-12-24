@@ -39,16 +39,16 @@ class ArtistController extends Controller
 
     public function show(Artist $artist)
     {
-        // Check if user has access to this artist
-        if (!auth()->user()->artists()->where('artists.id', $artist->id)->exists()) {
-            abort(403);
-        }
+        // Check if the artist is in the user's collection
+        $inCollection = auth()->user()->artists()->where('artists.id', $artist->id)->exists();
 
-        // Get the user's albums for this artist
-        $myAlbums = $artist->albums()
-            ->whereIn('id', auth()->user()->albums()->pluck('albums.id'))
-            ->orderBy('release_date', 'desc')
-            ->get();
+        // Get the user's albums for this artist if they have added it to their collection
+        $myAlbums = $inCollection ? 
+            $artist->albums()
+                ->whereIn('id', auth()->user()->albums()->pluck('albums.id'))
+                ->orderBy('release_date', 'desc')
+                ->get() : 
+            collect();
 
         // Get other users' albums for this artist
         $otherAlbums = $artist->albums()
@@ -68,7 +68,8 @@ class ArtistController extends Controller
         return Inertia::render('Artists/Show', [
             'artist' => array_merge($artist->toArray(), [
                 'my_albums' => $myAlbums,
-                'other_albums' => $otherAlbums
+                'other_albums' => $otherAlbums,
+                'in_collection' => $inCollection
             ]),
             'users' => $users
         ]);
