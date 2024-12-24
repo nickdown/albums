@@ -23,13 +23,13 @@
                                         <img :src="album.spotify_image_url" :alt="album.name" class="w-full h-auto rounded-lg shadow-lg transition-transform duration-200 group-hover:scale-105">
                                     </Link>
                                 </div>
-                                <Link 
+                                <Link
                                     :href="route('albums.show', album.id)"
                                     class="mt-2 text-center font-medium hover:text-gray-600 transition-colors duration-200"
                                 >
                                     {{ album.name }}
                                 </Link>
-                                <Link 
+                                <Link
                                     :href="route('artists.show', album.artist.id)"
                                     class="text-sm text-gray-500 text-center hover:text-gray-900"
                                 >
@@ -44,18 +44,18 @@
                 <!-- Other Albums Section -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h2 class="text-2xl font-bold mb-6">Other Albums You Might Like</h2>
+                        <h2 class="text-2xl font-bold mb-6">Albums Your Friends Like</h2>
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                             <div v-for="album in otherAlbums" :key="album.id" class="flex flex-col">
                                 <div class="relative group">
-                                    <button 
+                                    <button
                                         @click="quickAddAlbum(album)"
                                         class="block relative w-full"
                                         :disabled="importing === album.id"
                                     >
-                                        <img 
-                                            :src="album.spotify_image_url" 
-                                            :alt="album.name" 
+                                        <img
+                                            :src="album.spotify_image_url"
+                                            :alt="album.name"
                                             class="w-full h-auto rounded-lg shadow-lg transition-all duration-200 group-hover:opacity-75"
                                         >
                                         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -68,7 +68,7 @@
                                 <h3 class="mt-2 text-center font-medium group-hover:text-gray-600 transition-colors duration-200">
                                     {{ album.name }}
                                 </h3>
-                                <Link 
+                                <Link
                                     :href="route('artists.show', album.artist.id)"
                                     class="text-sm text-gray-500 text-center hover:text-gray-900"
                                 >
@@ -106,7 +106,7 @@ const importing = ref(null);
 
 const quickAddAlbum = (album) => {
     importing.value = album.id;
-    
+
     router.post(route('albums.import'), {
         albums: [{
             spotify_id: album.spotify_id,
@@ -119,4 +119,4 @@ const quickAddAlbum = (album) => {
         }
     });
 };
-</script> 
+</script>
