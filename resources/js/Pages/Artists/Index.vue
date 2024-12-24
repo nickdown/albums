@@ -49,7 +49,7 @@
                 <!-- Other Artists Section -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <h2 class="text-2xl font-bold mb-6">Other Artists You Might Like</h2>
+                        <h2 class="text-2xl font-bold mb-6">Artists Your Friends Like</h2>
                         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
                             <div v-for="artist in otherArtists" :key="artist.id" class="flex flex-col items-center text-center">
                                 <div class="relative group w-24 h-24">
