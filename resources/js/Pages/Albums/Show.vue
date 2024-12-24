@@ -134,4 +134,23 @@ const deleteAlbum = () => {
         }
     });
 };
+
+const addToCollection = () => {
+    router.post(route('albums.import'), {
+        albums: [{
+            name: props.album.name,
+            artist_id: props.album.artist.id,
+            spotify_id: props.album.spotify_id,
+            spotify_uri: props.album.spotify_uri,
+            spotify_image_url: props.album.spotify_image_url,
+            release_date: props.album.release_date
+        }]
+    }, {
+        preserveScroll: true,
+        onSuccess: () => {
+            // Refresh the page to update the UI
+            router.reload();
+        }
+    });
+};
 </script>
